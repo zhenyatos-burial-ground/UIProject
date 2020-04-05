@@ -9,9 +9,14 @@ const int MAX_VALUE = std::numeric_limits<int>::max();
 class IntegerError : public Error
 {
 public:
-	enum Code { OK = 0, ADD_OVERFLOW = 1, 
-		MULT_OVERFLOW = 2, SUB_OVERFLOW = 3, 
-		DIVIDED_BY_ZERO = 4 };
+	enum Code 
+	{ 
+		OK = 0, 
+		ADD_OVERFLOW = 1, 
+		MULT_OVERFLOW = 2, 
+		SUB_OVERFLOW = 3, 
+		DIVIDED_BY_ZERO = 4 
+	};
 	IntegerError(const Code code);
 
 private:
@@ -55,6 +60,12 @@ Integer::Integer(const Integer& other)
 Integer& Integer::operator=(const Integer& other)
 {
 	i = other.i;
+	return *this;
+}
+
+Integer& Integer::operator=(int value)
+{
+	i = value;
 	return *this;
 }
 
@@ -124,6 +135,11 @@ Integer& Integer::operator%=(const Integer& other)
 		i %= other.i;
 
 	return *this;
+}
+
+Integer Integer::operator-()
+{
+	return Integer(-i);
 }
 
 bool Integer::operator==(const Integer& other) const
@@ -238,10 +254,10 @@ Integer operator%(Integer a, const Integer& b)
 
 Integer GCD(Integer a, Integer b)
 {
-	if (int(a) == 0 && int(b) != 0)
+	if (a == 0 && b != 0)
 		return b;
 
-	if (int(b) == 0 && int(a) != 0)
+	if (b == 0 && a != 0)
 		return a;
 
 	if (a < b)
@@ -250,7 +266,7 @@ Integer GCD(Integer a, Integer b)
 	Integer res;
 
 	Integer r = a % b;
-	while (int(r)) {
+	while (r != 0) {
 		a = b;
 		b = r;
 		r = a % b;

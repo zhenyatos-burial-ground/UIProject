@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 class Integer 
@@ -9,6 +10,7 @@ public:
 	explicit Integer(int i = 0);
 	Integer(const Integer& other);
 	Integer& operator= (const Integer& other);
+	Integer& operator= (int value);
 	~Integer();
 
 	Integer& operator+=(const Integer& other);
@@ -16,6 +18,7 @@ public:
 	Integer& operator*=(const Integer& other);
 	Integer& operator/=(const Integer& other);
 	Integer& operator%=(const Integer& other);
+	Integer operator-();
 
 	bool operator==(const Integer& other) const;
 	bool operator!=(const Integer& other) const;
