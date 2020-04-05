@@ -159,6 +159,31 @@ bool Real::operator==(const Real& other) const
 	return (a_ == other.a_) && (b_ == other.b_);
 }
 
+bool Real::operator!=(const Real & other) const
+{
+	return (a_ != other.a_) || (b_ != other.b_);
+}
+
+bool Real::operator>(const Real& other) const
+{
+	return a_ > other.b_;
+}
+
+bool Real::operator>=(const Real& other) const
+{
+	return (*this > other) || (*this == other);
+}
+
+bool Real::operator<(const Real & other) const
+{
+	return b_ < other.a_;
+}
+
+bool Real::operator<=(const Real& other) const
+{
+	return (*this < other) || (*this == other);
+}
+
 bool Real::isNaN() const
 {
 	return (a_.isNaN()) && (b_.isNaN());

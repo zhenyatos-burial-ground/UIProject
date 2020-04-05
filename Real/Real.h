@@ -18,9 +18,16 @@ public:
 	Real& operator/=(const Real& other);
 
 	bool operator==(const Real& other) const;
+	bool operator!=(const Real& other) const;
+	bool operator>(const Real& other) const;
+	bool operator>=(const Real& other) const;
+	bool operator<(const Real& other) const;
+	bool operator<=(const Real& other) const;
 
 	bool isNaN() const;
 	bool containsZero() const;
+
+	friend std::ostream& operator<<(std::ostream& stream, const Rational& rational);
 };
 
 Real operator+(Real a, const Real& b);
