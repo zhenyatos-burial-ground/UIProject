@@ -9,7 +9,6 @@ public:
 	explicit Integer(int i = 0);
 	Integer(const Integer& other);
 	Integer& operator= (const Integer& other);
-	Integer& operator= (int value);
 	~Integer();
 
 	Integer& operator+=(const Integer& other);
@@ -24,6 +23,13 @@ public:
 	bool operator>=(const Integer& other) const;
 	bool operator<(const Integer& other) const;
 	bool operator<=(const Integer& other) const;
+
+	bool operator==(int value) const;
+	bool operator!=(int value) const;
+	bool operator>(int value) const;
+	bool operator>=(int value) const;
+	bool operator<(int value) const;
+	bool operator<=(int value) const;
 
 	explicit operator int() const;
 	friend std::ostream& operator<<(std::ostream& stream, const Integer& integer);

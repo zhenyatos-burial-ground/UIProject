@@ -58,12 +58,6 @@ Integer& Integer::operator=(const Integer& other)
 	return *this;
 }
 
-Integer& Integer::operator=(int value)
-{
-	i = value;
-	return *this;
-}
-
 Integer::~Integer() 
 {}
 
@@ -160,6 +154,36 @@ bool Integer::operator<(const Integer& other) const
 bool Integer::operator<=(const Integer& other) const
 {
 	return i <= other.i;
+}
+
+bool Integer::operator==(int value) const
+{
+	return i == value;
+}
+
+bool Integer::operator!=(int value) const
+{
+	return i != value;
+}
+
+bool Integer::operator>(int value) const
+{
+	return i > value;
+}
+
+bool Integer::operator>=(int value) const
+{
+	return i >= value;
+}
+
+bool Integer::operator<(int value) const
+{
+	return i < value;
+}
+
+bool Integer::operator<=(int value) const
+{
+	return i <= value;
 }
 
 Integer::operator int() const
