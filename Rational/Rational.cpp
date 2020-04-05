@@ -12,7 +12,9 @@ public:
 		ZERO_DENOMINATOR = 1,
 		DIVIDED_BY_ZERO = 2,
 		ADD_WITH_NAN = 3,
-		SUB_WITH_NAN = 4
+		SUB_WITH_NAN = 4,
+		MULT_WITH_NAN = 5,
+		DIV_WITH_NAN = 6
 	};
 	RationalError(const Code code);
 
@@ -41,7 +43,13 @@ std::string RationalError::getMessage(const Code code)
 		return CLASS_PREFIX + "(+ NaN) is undefined";
 		break;
 	case SUB_WITH_NAN:
-		return CLASS_PREFIX + "(- Nan) is undefined";
+		return CLASS_PREFIX + "(- NaN) is undefined";
+		break;
+	case MULT_WITH_NAN:
+		return CLASS_PREFIX + "(* NaN) is undefined";
+		break;
+	case DIV_WITH_NAN:
+		return CLASS_PREFIX + "(/ NaN) is undefined";
 		break;
 	}
 }
@@ -135,6 +143,43 @@ Rational& Rational::operator-=(const Rational& other)
 	return *this;
 }
 
+Rational& Rational::operator*=(const Rational & other)
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::MULT_WITH_NAN) << "\n";
+		return *this;
+	}
+
+	p_ = p_ * other.p_;
+	q_ = q_ * other.q_;
+	transform();
+
+	return *this;
+}
+
+Rational& Rational::operator/=(const Rational& other)
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::DIV_WITH_NAN) << "\n";
+		return *this;
+	}
+
+	if (other.p_ == 0)
+	{
+		std::cerr << RationalError(RationalError::DIVIDED_BY_ZERO) << "\n";
+		return *this;
+	}
+
+	Integer temp = p_ * other.q_;
+	q_ = q_ * other.p_;
+	p_ = temp;
+	transform();
+
+	return *this;
+}
+
 bool Rational::isNaN() const
 {
 	return (p_ == 0) && (q_ == 0);
@@ -149,5 +194,17 @@ Rational operator+(Rational a, const Rational& b)
 Rational operator-(Rational a, const Rational& b)
 {
 	a -= b;
+	return a;
+}
+
+Rational operator*(Rational a, const Rational& b)
+{
+	a *= b;
+	return a;
+}
+
+Rational operator/(Rational a, const Rational & b)
+{
+	a /= b;
 	return a;
 }

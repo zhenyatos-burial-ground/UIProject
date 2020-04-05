@@ -17,9 +17,13 @@ public:
 
 	Rational& operator+=(const Rational& other);
 	Rational& operator-=(const Rational& other);
+	Rational& operator*=(const Rational& other);
+	Rational& operator/=(const Rational& other);
 
 	bool isNaN() const; // Checks if p = 0 and q = 0
 };
 
 Rational operator+(Rational a, const Rational& b);
 Rational operator-(Rational a, const Rational& b);
+Rational operator*(Rational a, const Rational& b);
+Rational operator/(Rational a, const Rational& b);

@@ -10,7 +10,8 @@ int main()
 	Rational s = { 1, 2 };
 	Rational t = s;
 
-	s += r;
-	t -= r;
+	t *= r;
+	r /= s;
+	r /= {0, 1};
 	return 0;
 }
