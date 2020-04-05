@@ -18,6 +18,7 @@ int main()
 
 	Real test1 = a / b;
 	Real test2 = a + b;
+	b = Rational(-1, 2) * b;
 
 	return 0;
 }

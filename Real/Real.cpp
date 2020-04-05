@@ -3,6 +3,7 @@
 #include <algorithm>
 
 const std::string CLASS_PREFIX = "[Real] ";
+const std::string COMMA = ", ";
 
 class RealError : public Error
 {
@@ -203,6 +204,15 @@ bool Real::containsZero() const
 		return false;
 }
 
+std::ostream & operator<<(std::ostream& stream, const Real& real)
+{
+	if (real.isNaN())
+		stream << "NaN";
+	else
+		stream << "[" << real.a_ << COMMA << real.b_ << "]";
+	return stream;
+}
+
 Real operator+(Real a, const Real& b)
 {
 	a += b;
@@ -225,4 +235,9 @@ Real operator/(Real a, const Real & b)
 {
 	a /= b;
 	return a;
+}
+
+Real operator*(Rational m, const Real& a)
+{
+	return Real(m, m) * a;
 }

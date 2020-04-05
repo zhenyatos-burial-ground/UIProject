@@ -27,12 +27,13 @@ public:
 	bool isNaN() const;
 	bool containsZero() const;
 
-	friend std::ostream& operator<<(std::ostream& stream, const Rational& rational);
+	friend std::ostream& operator<<(std::ostream& stream, const Real& real);
 };
 
 Real operator+(Real a, const Real& b);
 Real operator-(Real a, const Real& b);
 Real operator*(Real a, const Real& b);
 Real operator/(Real a, const Real& b);
+Real operator*(Rational m, const Real& a);
 
 const Real REAL_NaN = Real(RATIONAL_NaN, RATIONAL_NaN);
