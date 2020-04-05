@@ -1,15 +1,16 @@
 ﻿#include <iostream>
 #include "Integer.h"
+#include "Rational.h"
 
 using namespace std;
 
 int main()
 {
-	int t;
-	while (true) 
-	{
-		std::cin >> t;
-		std::cout << t * 2 << "\n";
-	}
+	Rational r = { 2, 5 };
+	Rational s = { 1, 2 };
+	
+	std::cout << (r < s);
+	int x;
+	std::cin >> x;
 	return 0;
 }

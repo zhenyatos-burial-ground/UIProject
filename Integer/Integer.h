@@ -1,4 +1,5 @@
-#include "Error.h"
+#pragma once
+#include <iostream>
 
 class Integer 
 {
@@ -10,13 +11,14 @@ public:
 	Integer(const Integer& other);
 	Integer& operator= (const Integer& other);
 	Integer& operator= (int value);
-	~Integer();
+	~Integer() = default;
 
 	Integer& operator+=(const Integer& other);
 	Integer& operator-=(const Integer& other);
 	Integer& operator*=(const Integer& other);
 	Integer& operator/=(const Integer& other);
 	Integer& operator%=(const Integer& other);
+	Integer operator-();
 
 	bool operator==(const Integer& other) const;
 	bool operator!=(const Integer& other) const;
@@ -24,6 +26,13 @@ public:
 	bool operator>=(const Integer& other) const;
 	bool operator<(const Integer& other) const;
 	bool operator<=(const Integer& other) const;
+
+	bool operator==(int value) const;
+	bool operator!=(int value) const;
+	bool operator>(int value) const;
+	bool operator>=(int value) const;
+	bool operator<(int value) const;
+	bool operator<=(int value) const;
 
 	explicit operator int() const;
 	friend std::ostream& operator<<(std::ostream& stream, const Integer& integer);
@@ -35,3 +44,4 @@ Integer operator-(Integer a, const Integer& b);
 Integer operator*(Integer a, const Integer& b);
 Integer operator/(Integer a, const Integer& b);
 Integer operator%(Integer a, const Integer& b);
+Integer GCD(Integer a, Integer b);
