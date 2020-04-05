@@ -6,12 +6,11 @@ using namespace std;
 
 int main()
 {
-	Rational r = { 1, -2 };
+	Rational r = { 2, 5 };
 	Rational s = { 1, 2 };
-	Rational t = s;
-
-	t *= r;
-	r /= s;
-	r /= {0, 1};
+	
+	std::cout << (r < s);
+	int x;
+	std::cin >> x;
 	return 0;
 }

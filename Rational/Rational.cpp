@@ -2,6 +2,7 @@
 #include "Error.h"
 
 const std::string CLASS_PREFIX = "[Rational] ";
+const std::string SEPARATOR = " / ";
 
 class RationalError : public Error
 {
@@ -14,7 +15,8 @@ public:
 		ADD_WITH_NAN = 3,
 		SUB_WITH_NAN = 4,
 		MULT_WITH_NAN = 5,
-		DIV_WITH_NAN = 6
+		DIV_WITH_NAN = 6,
+		CMP_WITH_NAN = 7
 	};
 	RationalError(const Code code);
 
@@ -50,6 +52,9 @@ std::string RationalError::getMessage(const Code code)
 		break;
 	case DIV_WITH_NAN:
 		return CLASS_PREFIX + "(/ NaN) is undefined";
+		break;
+	case CMP_WITH_NAN:
+		return CLASS_PREFIX + "(>=< NaN) is undefined";
 		break;
 	}
 }
@@ -180,9 +185,84 @@ Rational& Rational::operator/=(const Rational& other)
 	return *this;
 }
 
+bool Rational::operator==(const Rational& other) const
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::CMP_WITH_NAN) << "\n";
+		return false;
+	}
+
+	return (p_ == other.p_) && (q_ == other.q_);
+}
+
+bool Rational::operator!=(const Rational& other) const
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::CMP_WITH_NAN) << "\n";
+		return false;
+	}
+
+	return (p_ != other.p_) || (q_ != other.q_);
+}
+
+bool Rational::operator>(const Rational& other) const
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::CMP_WITH_NAN) << "\n";
+		return false;
+	}
+
+	return (p_ * other.q_ > q_ * other.p_);
+}
+
+bool Rational::operator>=(const Rational& other) const
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::CMP_WITH_NAN) << "\n";
+		return false;
+	}
+
+	return (p_ * other.q_ >= q_ * other.p_);
+}
+
+bool Rational::operator<(const Rational& other) const
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::CMP_WITH_NAN) << "\n";
+		return false;
+	}
+
+	return (p_ * other.q_ < q_ * other.p_);
+}
+
+bool Rational::operator<=(const Rational& other) const
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::CMP_WITH_NAN) << "\n";
+		return false;
+	}
+
+	return (p_ * other.q_ <= q_ * other.p_);
+}
+
 bool Rational::isNaN() const
 {
 	return (p_ == 0) && (q_ == 0);
+}
+
+std::ostream& operator<<(std::ostream& stream, const Rational& rational)
+{
+	if (rational.isNaN())
+		stream << "NaN";
+	else
+		stream << rational.p_ << SEPARATOR << rational.q_;
+	return stream;
 }
 
 Rational operator+(Rational a, const Rational& b)

@@ -20,7 +20,16 @@ public:
 	Rational& operator*=(const Rational& other);
 	Rational& operator/=(const Rational& other);
 
+	bool operator==(const Rational& other) const;
+	bool operator!=(const Rational& other) const;
+	bool operator>(const Rational& other) const;
+	bool operator>=(const Rational& other) const;
+	bool operator<(const Rational& other) const;
+	bool operator<=(const Rational& other) const;
+
 	bool isNaN() const; // Checks if p = 0 and q = 0
+
+	friend std::ostream& operator<<(std::ostream& stream, const Rational& rational);
 };
 
 Rational operator+(Rational a, const Rational& b);
