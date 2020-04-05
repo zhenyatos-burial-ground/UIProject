@@ -148,7 +148,7 @@ Rational& Rational::operator-=(const Rational& other)
 	return *this;
 }
 
-Rational& Rational::operator*=(const Rational & other)
+Rational& Rational::operator*=(const Rational& other)
 {
 	if (isNaN() || other.isNaN())
 	{

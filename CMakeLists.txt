@@ -3,12 +3,13 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-include_directories(Error Integer Rational)
+include_directories(Error Integer Rational Real)
 
 # Добавьте источник в исполняемый файл этого проекта.
 add_executable (UIProject "main.cpp" 
 "Error/Error.h" "Error/Error.cpp"
 "Integer/Integer.h" "Integer/Integer.cpp"
-"Rational/Rational.h" "Rational/Rational.cpp")
+"Rational/Rational.h" "Rational/Rational.cpp"
+"Real/Real.h" "Real/Real.cpp")
 
 # TODO: Добавьте тесты и целевые объекты, если это необходимо.
