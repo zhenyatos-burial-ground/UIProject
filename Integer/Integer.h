@@ -11,7 +11,7 @@ public:
 	Integer(const Integer& other);
 	Integer& operator= (const Integer& other);
 	Integer& operator= (int value);
-	~Integer();
+	~Integer() = default;
 
 	Integer& operator+=(const Integer& other);
 	Integer& operator-=(const Integer& other);

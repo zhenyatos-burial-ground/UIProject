@@ -10,7 +10,8 @@ public:
 	{
 		OK = 0,
 		ZERO_DENOMINATOR = 1,
-		DIVIDED_BY_ZERO = 2
+		DIVIDED_BY_ZERO = 2,
+		SUM_WITH_NAN = 3
 	};
 	RationalError(const Code code);
 
@@ -30,39 +31,46 @@ std::string RationalError::getMessage(const Code code)
 		return "";
 		break;
 	case ZERO_DENOMINATOR:
-		return CLASS_PREFIX + "can't build Rational with p /= 0, q = 0";
+		return CLASS_PREFIX + "Rational (p /= 0, q = 0) is undefined";
+		break;
+	case DIVIDED_BY_ZERO:
+		return CLASS_PREFIX + "(/ 0) is undefined";
+		break;
+	case SUM_WITH_NAN:
+		return CLASS_PREFIX + "(+ NaN) is undefined";
 		break;
 	}
 }
 
 void Rational::transform()
 {
-	if (p == 0)
+	if (p_ == 0)
 	{
-		q = 1;
+		q_ = 1;
 		return;
 	}
 
-	if (q < 0)
+	if (q_ < 0)
 	{
-		p = -p;
-		q = -q;
+		p_ = -p_;
+		q_ = -q_;
 	}
 
-	Integer gcd = GCD(p, q);
+	Integer gcd = GCD(p_, q_);
 	gcd = gcd < 0 ? -gcd : gcd; // If GCD is negative
-	p /= gcd;
-	q /= gcd;
+	p_ /= gcd;
+	q_ /= gcd;
 }
 
 Rational::Rational(Integer p, Integer q)
-	: p(p), q(q)
+	: p_(p), q_(q)
 {
 	if (q == 0)
 		if (p != 0)
 		{
 			std::cerr << RationalError(RationalError::ZERO_DENOMINATOR) << "\n";
-			p = 0;
+			p_ = 0;
+			return;
 		}
 		else
 			return;
@@ -81,3 +89,34 @@ Rational::Rational(Integer a)
 Rational::Rational(int a)
 	: Rational(a, 1)
 {}
+
+Rational::Rational(const Rational& other)
+	: p_(other.p_), q_(other.q_)
+{}
+
+Rational& Rational::operator=(const Rational& other)
+{
+	p_ = other.p_;
+	q_ = other.q_;
+	return *this;
+}
+
+Rational& Rational::operator+=(const Rational& other)
+{
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RationalError(RationalError::SUM_WITH_NAN) << "\n";
+		return *this;
+	}
+
+	p_ = p_ * other.q_ + q_ * other.p_;
+	q_ *= other.q_;
+	transform();
+
+	return *this;
+}
+
+bool Rational::isNaN() const
+{
+	return (p_ == 0) && (q_ == 0);
+}

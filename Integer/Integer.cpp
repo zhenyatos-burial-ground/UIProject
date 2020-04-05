@@ -31,16 +31,16 @@ std::string IntegerError::getMessage(const Code code)
 		return "";
 		break;
 	case ADD_OVERFLOW:
-		return CLASS_PREFIX + "addition overflow detected";
+		return CLASS_PREFIX + "(+) overflow detected";
 		break;
 	case MULT_OVERFLOW:
-		return CLASS_PREFIX + "multiplication overflow detected";
+		return CLASS_PREFIX + "(*) overflow detected";
 		break;
 	case SUB_OVERFLOW:
-		return CLASS_PREFIX + "substraction overflow detected";
+		return CLASS_PREFIX + "(-) overflow detected";
 		break;
 	case DIVIDED_BY_ZERO:
-		return CLASS_PREFIX + "division or modulo by zero is undefined";
+		return CLASS_PREFIX + "(/ 0, % 0) is undefined";
 		break;
 	}
 }
@@ -68,9 +68,6 @@ Integer& Integer::operator=(int value)
 	i = value;
 	return *this;
 }
-
-Integer::~Integer() 
-{}
 
 Integer& Integer::operator+=(const Integer& other)
 {
