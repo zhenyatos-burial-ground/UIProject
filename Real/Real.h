@@ -20,10 +20,12 @@ public:
 	bool operator==(const Real& other) const;
 
 	bool isNaN() const;
+	bool containsZero() const;
 };
 
 Real operator+(Real a, const Real& b);
 Real operator-(Real a, const Real& b);
 Real operator*(Real a, const Real& b);
+Real operator/(Real a, const Real& b);
 
 const Real REAL_NaN = Real(RATIONAL_NaN, RATIONAL_NaN);

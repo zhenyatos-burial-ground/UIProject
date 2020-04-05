@@ -13,7 +13,10 @@ public:
 		EMPTY_INTERVAL = 1,
 		ADD_WITH_NAN = 2,
 		SUB_WITH_NAN = 3,
-		MULT_WITH_NAN = 4
+		MULT_WITH_NAN = 4,
+		DIV_WITH_NAN = 5,
+		ZERO_IN_NAN = 6,
+		DIVIDED_BY_ZERO = 7
 	};
 	RealError(const Code code);
 
@@ -43,6 +46,15 @@ std::string RealError::getMessage(const Code code)
 		break;
 	case MULT_WITH_NAN:
 		return CLASS_PREFIX + "(* NaN) is undefined";
+		break;
+	case DIV_WITH_NAN:
+		return CLASS_PREFIX + "(/ NaN) is undefined";
+		break;
+	case ZERO_IN_NAN:
+		return CLASS_PREFIX + "(0 in NaN) is undefined";
+		break;
+	case DIVIDED_BY_ZERO:
+		return CLASS_PREFIX + "(/ b, 0 in b) result is undefined";
 		break;
 	}
 }
@@ -128,6 +140,17 @@ Real& Real::operator*=(const Real& other)
 
 Real& Real::operator/=(const Real& other)
 {
+	if (isNaN() || other.isNaN())
+	{
+		std::cerr << RealError(RealError::DIV_WITH_NAN) << "\n";
+		return *this;
+	}
+	if (containsZero())
+	{
+		std::cerr << RealError(RealError::DIVIDED_BY_ZERO) << "\n";
+		return *this;
+	}
+	*this *= Real(Rational(1) / other.b_, Rational(1) / other.a_);
 	return *this;
 }
 
@@ -139,6 +162,20 @@ bool Real::operator==(const Real& other) const
 bool Real::isNaN() const
 {
 	return (a_.isNaN()) && (b_.isNaN());
+}
+
+bool Real::containsZero() const
+{
+	if (isNaN())
+	{
+		std::cerr << RealError(RealError::ZERO_IN_NAN) << "\n";
+		return false;
+	}
+
+	if (a_ * b_ <= Rational(0))
+		return true;
+	else
+		return false;
 }
 
 Real operator+(Real a, const Real& b)
@@ -156,5 +193,11 @@ Real operator-(Real a, const Real& b)
 Real operator*(Real a, const Real& b)
 {
 	a *= b;
+	return a;
+}
+
+Real operator/(Real a, const Real & b)
+{
+	a /= b;
 	return a;
 }

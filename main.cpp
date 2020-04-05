@@ -16,7 +16,7 @@ int main()
 	Real a = { a1, a2 };
 	Real b = { b1, b2 };
 
-	Real test1 = a * b;
+	Real test1 = a / b;
 	Real test2 = a + b;
 
 	return 0;
