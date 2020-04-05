@@ -85,7 +85,7 @@ Integer& Integer::operator-=(const Integer & other)
 {
 	if ((i < 0) && (other.i >= 0) && (i < MIN_VALUE + other.i)) // Equivalent of two negative addition
 		std::cerr << IntegerError(IntegerError::SUB_OVERFLOW) << "\n";
-	else if ((i >= 0) && (other.i < 0) && (i < MAX_VALUE + other.i)) // Equivalent of two non-negative addition
+	else if ((i >= 0) && (other.i < 0) && (i > MAX_VALUE + other.i)) // Equivalent of two non-negative addition
 		std::cerr << IntegerError(IntegerError::SUB_OVERFLOW) << "\n";
 	else
 		i -= other.i;
