@@ -5,11 +5,11 @@ using namespace std;
 
 int main()
 {
-	int t;
+	Integer a, b;
 	while (true) 
 	{
-		std::cin >> t;
-		std::cout << t * 2 << "\n";
+		std::cin >> a >> b;
+		std::cout << GCD(a, b) << "\n";
 	}
 	return 0;
 }

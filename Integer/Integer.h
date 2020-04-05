@@ -1,4 +1,4 @@
-#include "Error.h"
+#include <iostream>
 
 class Integer 
 {
@@ -35,3 +35,4 @@ Integer operator-(Integer a, const Integer& b);
 Integer operator*(Integer a, const Integer& b);
 Integer operator/(Integer a, const Integer& b);
 Integer operator%(Integer a, const Integer& b);
+Integer GCD(Integer a, Integer b);

@@ -1,6 +1,6 @@
 #include "Integer.h"
+#include "Error.h"
 #include <string>
-#include <iostream>
 
 const std::string CLASS_PREFIX = "[Integer] ";
 const int MIN_VALUE = std::numeric_limits<int>::min();
@@ -162,13 +162,18 @@ bool Integer::operator<=(const Integer& other) const
 	return i <= other.i;
 }
 
+Integer::operator int() const
+{
+	return i;
+}
+
 std::ostream& operator<<(std::ostream& stream, const Integer& integer)
 {
 	stream << integer.i;
 	return stream;
 }
 
-std::istream & operator>>(std::istream& stream, Integer& integer)
+std::istream& operator>>(std::istream& stream, Integer& integer)
 {
 	int x;
 	stream >> x;
@@ -206,7 +211,27 @@ Integer operator%(Integer a, const Integer& b)
 	return a;
 }
 
-Integer::operator int() const
+
+Integer GCD(Integer a, Integer b)
 {
-	return i;
+	if (int(a) == 0 && int(b) != 0)
+		return b;
+
+	if (int(b) == 0 && int(a) != 0)
+		return a;
+
+	if (a < b)
+		std::swap(a, b);
+
+	Integer res;
+
+	Integer r = a % b;
+	while (int(r)) {
+		a = b;
+		b = r;
+		r = a % b;
+	}
+	res = b;
+
+	return res;
 }
