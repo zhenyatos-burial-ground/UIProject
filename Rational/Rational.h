@@ -20,6 +20,7 @@ public:
 	Rational& operator-=(const Rational& other);
 	Rational& operator*=(const Rational& other);
 	Rational& operator/=(const Rational& other);
+	Rational operator-();
 
 	bool operator==(const Rational& other) const;
 	bool operator!=(const Rational& other) const;

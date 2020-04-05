@@ -155,6 +155,11 @@ Real& Real::operator/=(const Real& other)
 	return *this;
 }
 
+Real Real::operator-()
+{
+	return Real(-b_, -a_);
+}
+
 bool Real::operator==(const Real& other) const
 {
 	return (a_ == other.a_) && (b_ == other.b_);

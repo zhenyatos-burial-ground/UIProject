@@ -16,6 +16,7 @@ public:
 	Real& operator-=(const Real& other);
 	Real& operator*=(const Real& other);
 	Real& operator/=(const Real& other);
+	Real operator-();
 
 	bool operator==(const Real& other) const;
 	bool operator!=(const Real& other) const;

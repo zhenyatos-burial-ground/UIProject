@@ -185,6 +185,11 @@ Rational& Rational::operator/=(const Rational& other)
 	return *this;
 }
 
+Rational Rational::operator-()
+{
+	return Rational(-p_, q_);
+}
+
 bool Rational::operator==(const Rational& other) const
 {
 	if (isNaN() || other.isNaN())
