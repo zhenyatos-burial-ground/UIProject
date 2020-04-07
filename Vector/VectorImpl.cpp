@@ -100,6 +100,3 @@ namespace
 		return value;
 	}
 }
-
-IVector::~IVector()
-{}
