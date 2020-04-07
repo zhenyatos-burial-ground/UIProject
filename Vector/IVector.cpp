@@ -58,7 +58,7 @@ IVector* IVector::add(IVector const* pOperand1, IVector const* pOperand2, ILogge
 	if (pOperand1->getDim() != pOperand2->getDim())
 	{
 		if (pLogger != nullptr)
-			pLogger->log("In [IVector::add] operands dimension is different", RESULT_CODE::OUT_OF_BOUNDS);
+			pLogger->log("In [IVector::add] operands dimension should be the same", RESULT_CODE::OUT_OF_BOUNDS);
 		return nullptr;
 	}
 
@@ -104,7 +104,7 @@ IVector* IVector::sub(IVector const* pOperand1, IVector const* pOperand2, ILogge
 	if (pOperand1->getDim() != pOperand2->getDim())
 	{
 		if (pLogger != nullptr)
-			pLogger->log("In [IVector::sub] operands dimension is different", RESULT_CODE::OUT_OF_BOUNDS);
+			pLogger->log("In [IVector::sub] operands dimension should be the same", RESULT_CODE::OUT_OF_BOUNDS);
 		return nullptr;
 	}
 
@@ -168,21 +168,21 @@ double IVector::mul(IVector const* pOperand1, IVector const* pOperand2, ILogger*
 	if (pOperand1 == nullptr)
 	{
 		if (pLogger != nullptr)
-			pLogger->log("In [IVector::sub] pOperand1 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
+			pLogger->log("In [double IVector::mul] pOperand1 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
 		return 0;
 	}
 
 	if (pOperand2 == nullptr)
 	{
 		if (pLogger != nullptr)
-			pLogger->log("In [IVector::sub] pOperand2 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
+			pLogger->log("In [double IVector::mul] pOperand2 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
 		return 0;
 	}
 
 	if (pOperand1->getDim() != pOperand2->getDim())
 	{
 		if (pLogger != nullptr)
-			pLogger->log("In [IVector::sub] operands dimension is different", RESULT_CODE::OUT_OF_BOUNDS);
+			pLogger->log("In [double IVector::mul] operands dimension should be the same", RESULT_CODE::OUT_OF_BOUNDS);
 		return 0;
 	}
 
@@ -196,7 +196,41 @@ double IVector::mul(IVector const* pOperand1, IVector const* pOperand2, ILogger*
 
 RESULT_CODE IVector::equals(IVector const* pOperand1, IVector const* pOperand2, NORM norm, double tolerance, bool* result, ILogger* pLogger)
 {
-	return RESULT_CODE();
+	if (pOperand1 == nullptr)
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::equals] pOperand1 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
+		return RESULT_CODE::WRONG_ARGUMENT;
+	}
+
+	if (pOperand2 == nullptr)
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::equals] pOperand2 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
+		return RESULT_CODE::WRONG_ARGUMENT;
+	}
+
+	if (tolerance < 0)
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::equals] toleranse is negative", RESULT_CODE::WRONG_ARGUMENT);
+		return RESULT_CODE::WRONG_ARGUMENT;
+	}
+
+	if (pOperand1->getDim() != pOperand2->getDim())
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::equals] operands dimension should be the same", RESULT_CODE::OUT_OF_BOUNDS);
+		return RESULT_CODE::OUT_OF_BOUNDS;
+	}
+
+	IVector* diff = IVector::sub(pOperand1, pOperand2, pLogger);
+	if (diff->norm(norm) < tolerance)
+		*result = true;
+	else
+		*result = false;
+
+	return RESULT_CODE::SUCCESS;
 }
 
 IVector::~IVector()
