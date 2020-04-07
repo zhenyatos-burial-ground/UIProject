@@ -5,20 +5,23 @@ IVector* IVector::createVector(size_t dim, double* pData, ILogger* pLogger)
 {
 	if (pData == nullptr)
 	{
-		pLogger->log("In [createVector] pData is nullptr", RESULT_CODE::WRONG_ARGUMENT);
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::createVector] pData is nullptr", RESULT_CODE::WRONG_ARGUMENT);
 		return nullptr;
 	}
 
 	if (dim == 0)
 	{
-		pLogger->log("In [createVector] dim = 0", RESULT_CODE::WRONG_DIM);
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::createVector] dim = 0", RESULT_CODE::WRONG_DIM);
 		return nullptr;
 	}
 
 	double* data = new (std::nothrow)double[dim];
 	if (data == nullptr)
 	{
-		pLogger->log("In [createVector] not enough memory for [double* data]", RESULT_CODE::OUT_OF_MEMORY);
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::createVector] not enough memory for [double* data]", RESULT_CODE::OUT_OF_MEMORY);
 		return nullptr;
 	}
 
@@ -28,17 +31,60 @@ IVector* IVector::createVector(size_t dim, double* pData, ILogger* pLogger)
 	IVector* res = new (std::nothrow)VectorImpl(dim, data);
 	if (res == nullptr)
 	{
-		pLogger->log("In [createVector] not enough memory for [IVector* res]", RESULT_CODE::OUT_OF_MEMORY);
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::createVector] not enough memory for [IVector* res]", RESULT_CODE::OUT_OF_MEMORY);
 		return nullptr;
 	}
 
-	pLogger->createLogger(res);
+	if (pLogger != nullptr)
+		pLogger->createLogger(res);
 	return res;
 }
 
 IVector* IVector::add(IVector const* pOperand1, IVector const* pOperand2, ILogger* pLogger)
 {
-	return nullptr;
+	if (pOperand1 == nullptr && pLogger != nullptr)
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::add] pOperand1 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
+		return nullptr;
+	}
+
+	if (pOperand2 == nullptr)
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::add] pOperand2 is nullptr", RESULT_CODE::WRONG_ARGUMENT);
+		return nullptr;
+	}
+
+	if (pOperand1->getDim() != pOperand2->getDim())
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::add] operands dimension is different", RESULT_CODE::OUT_OF_BOUNDS);
+		return nullptr;
+	}
+
+	size_t dim = pOperand1->getDim();
+	double* data = new (std::nothrow)double[dim];
+	if (data == nullptr)
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::add] not enough memory for [double* data]", RESULT_CODE::OUT_OF_MEMORY);
+		return nullptr;
+	}
+
+	for (int i = 0; i < dim; i++)
+		data[i] = pOperand1->getCoord(i) + pOperand2->getCoord(i);
+	
+	IVector* res = new (std::nothrow)VectorImpl(dim, data);
+	if (res == nullptr)
+	{
+		if (pLogger != nullptr)
+			pLogger->log("In [IVector::add] not enough memory for [IVector* res]", RESULT_CODE::OUT_OF_MEMORY);
+		return nullptr;
+	}
+
+	return res;
 }
 
 IVector* IVector::sub(IVector const* pOperand1, IVector const* pOperand2, ILogger* pLogger)
