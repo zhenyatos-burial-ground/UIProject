@@ -1,5 +1,5 @@
-#include "Rational.h"
-#include "Error.h"
+#include "models/Rational.h"
+#include "models/Error.h"
 
 const std::string CLASS_PREFIX = "[Rational] ";
 const std::string SEPARATOR = " / ";

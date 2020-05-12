@@ -1,4 +1,4 @@
-#include "Error.h"
+#include "models/Error.h"
 
 Error::Error(int code, std::string message)
 	: code(code), message(message)
