@@ -1,5 +1,5 @@
-#include "Integer.h"
-#include "Error.h"
+#include "models/Integer.h"
+#include "models/Error.h"
 #include <string>
 
 const std::string CLASS_PREFIX = "[Integer] ";
