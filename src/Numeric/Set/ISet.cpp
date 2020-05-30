@@ -76,5 +76,40 @@ ISet* ISet::add(ISet const* pOperand1, ISet const* pOperand2, IVector::NORM norm
 	return res;
 }
 
+ISet* ISet::intersect(ISet const* pOperand1, ISet const* pOperand2, IVector::NORM norm, double tolerance, ILogger* pLogger)
+{
+	std::string msg;
+	RESULT_CODE code = validateData(pOperand1, pOperand2, tolerance, "[ISet::add]", msg);
+	if (code != RESULT_CODE::SUCCESS)
+		if (pLogger != nullptr)
+		{
+			pLogger->log(msg.c_str(), code);
+			return nullptr;
+		}
+
+	ISet* res = ISet::createSet(pLogger);
+	if (res == nullptr)
+		if (pLogger != nullptr)
+			pLogger->log("In [ISet:intersect] not enough memory for [ISet* res]", RESULT_CODE::OUT_OF_MEMORY);
+
+	size_t size = pOperand1->getSize();
+	for (size_t indx = 0; indx < size; indx++)
+	{
+		IVector* vec1 = nullptr;
+		code = pOperand1->get(vec1, indx);
+		if (code == RESULT_CODE::SUCCESS)
+		{
+			IVector* vec2 = nullptr;
+			code = pOperand2->get(vec2, vec1, norm, tolerance);
+			if (code == RESULT_CODE::SUCCESS && vec2 != nullptr)
+				res->insert(vec2, norm, tolerance);
+			delete vec2;
+		}
+		delete vec1;
+	}
+
+	return res;
+}
+
 ISet::~ISet()
 {}

@@ -108,3 +108,71 @@ void Set3::test()
 	delete res1;
 	delete res2;
 }
+
+void Set4::test()
+{
+	ILogger* logger = ILogger::createLogger(nullptr);
+
+	double data1[3] = { 1, 0, 0 };
+	IVector* vec1 = IVector::createVector(3, data1, logger);
+	double data2[3] = { 0, 1, 0 };
+	IVector* vec2 = IVector::createVector(3, data2, logger);
+	double data3[3] = { 0, 1.1, 0 };
+	IVector* vec3 = IVector::createVector(3, data3, logger);
+	double data4[3] = { 1.1, 0, 0.1 };
+	IVector* vec4 = IVector::createVector(3, data4, logger);
+	double data5[3] = { 2, 2, 3 };
+	IVector* vec5 = IVector::createVector(3, data5, logger);
+	double data6[3] = { 4, 0, 1 };
+	IVector* vec6 = IVector::createVector(3, data6, logger);
+
+	IVector::NORM normInf = IVector::NORM::NORM_INF;
+
+	ISet* set1 = ISet::createSet(logger);
+	set1->insert(vec1, normInf, 0.2);
+	set1->insert(vec3, normInf, 0.2);
+	set1->insert(vec5, normInf, 0.2);
+
+	ISet* set2 = ISet::createSet(logger);
+	set2->insert(vec2, normInf, 0.2);
+	set2->insert(vec4, normInf, 0.2);
+	set2->insert(vec6, normInf, 0.2);
+
+	// CHECK: intersection is correct
+	ISet* res = ISet::intersect(set1, set2, normInf, 0.2, logger);
+	_EQ_(res->getDim(), (size_t)3);
+	_EQ_(res->getSize(), (size_t)2);
+
+	delete set1;
+	delete set2;
+
+	IVector* test;
+	// CHECK: vec1, vec2, vec3, vec4 are in the intersection with tolerance 0.2
+	_EQ_(res->get(test, vec1, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_INEQ_(test, (IVector*)nullptr);
+	delete test;
+	_EQ_(res->get(test, vec2, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_INEQ_(test, (IVector*)nullptr);
+	delete test;
+	_EQ_(res->get(test, vec3, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_INEQ_(test, (IVector*)nullptr);
+	delete test;
+	_EQ_(res->get(test, vec4, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_INEQ_(test, (IVector*)nullptr);
+	delete test;
+
+	test = nullptr;
+	// CHECK: vec5, vec6 are not in the intersection with tolerance 0.2
+	_EQ_(res->get(test, vec5, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_EQ_(test, (IVector*)nullptr);
+	_EQ_(res->get(test, vec6, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_EQ_(test, (IVector*)nullptr);
+
+	delete vec1;
+	delete vec2;
+	delete vec3;
+	delete vec4;
+	delete vec5;
+	delete vec6;
+	delete res;
+}

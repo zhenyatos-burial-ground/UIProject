@@ -28,3 +28,11 @@ private:
 public:
 	Set3() : Test(SET_PREFIX + "Add") {}
 };
+
+class Set4 : public Test
+{
+private:
+	void test() override;
+public:
+	Set4() : Test(SET_PREFIX + "Intersect") {}
+};
