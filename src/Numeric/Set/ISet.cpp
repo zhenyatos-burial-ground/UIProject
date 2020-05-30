@@ -53,7 +53,10 @@ ISet* ISet::add(ISet const* pOperand1, ISet const* pOperand2, IVector::NORM norm
 	RESULT_CODE code = validateData(pOperand1, pOperand2, tolerance, "[ISet::add]", msg);
 	if (code != RESULT_CODE::SUCCESS)
 		if (pLogger != nullptr)
+		{
 			pLogger->log(msg.c_str(), code);
+			return nullptr;
+		}
 
 	ISet* res = pOperand1->clone();
 	if (res == nullptr)

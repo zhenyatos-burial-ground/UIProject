@@ -77,23 +77,34 @@ void Set3::test()
 	IVector* vec2 = IVector::createVector(4, data2, logger);
 	double data3[4] = { 0, 0, 1, 0 };
 	IVector* vec3 = IVector::createVector(4, data3, logger);
+	double data4[3] = { 0, 0, 0 };
+	IVector* vec4 = IVector::createVector(3, data4, logger);
 
 	ISet* set1 = ISet::createSet(logger);
 	ISet* set2 = ISet::createSet(logger);
+	ISet* set3 = ISet::createSet(logger);
 
 	set1->insert(vec1, IVector::NORM::NORM_1, 0.1);
 	set1->insert(vec2, IVector::NORM::NORM_1, 0.1);
 	set2->insert(vec2, IVector::NORM::NORM_1, 0.1);
 	set2->insert(vec3, IVector::NORM::NORM_1, 0.1);
+	set3->insert(vec4, IVector::NORM::NORM_1, 0.1);
 
-	ISet* res = ISet::add(set1, set2, IVector::NORM::NORM_1, 0.1, logger);
-	_EQ_(res->getSize(), (size_t)3);
-	_EQ_(res->getDim(), (size_t)4);
+	// CHECK: addition is correct
+	ISet* res1 = ISet::add(set1, set2, IVector::NORM::NORM_1, 0.1, logger);
+	_EQ_(res1->getSize(), (size_t)3);
+	_EQ_(res1->getDim(), (size_t)4);
+
+	// CHECK: attempt to add set1 with dim = 4 and set3 with dim = 3
+	ISet* res2 = ISet::add(set1, set3, IVector::NORM::NORM_1, 0.1, logger);
+	_EQ_(res2, (ISet*)nullptr);
 
 	delete vec1;
 	delete vec2;
 	delete vec3;
 	delete set1;
 	delete set2;
-	delete res;
+	delete set3; 
+	delete res1;
+	delete res2;
 }
