@@ -15,13 +15,17 @@ namespace
 		~SetImpl() override;
 
 		RESULT_CODE insert(const IVector* pVector, IVector::NORM norm, double tolerance) override;
+
 		RESULT_CODE get(IVector*& pVector, size_t index) const override; 
 		RESULT_CODE get(IVector*& pVector, IVector const* pSample, IVector::NORM norm, double tolerance) const override;
 		size_t getDim() const override;
 		size_t getSize() const override;
+
 		void clear() override;
 		RESULT_CODE erase(size_t index) override;
 		RESULT_CODE erase(IVector const* pSample, IVector::NORM norm, double tolerance) override;
+
+		ISet* clone() const override;
 	};
 
 	SetImpl::SetImpl()
@@ -181,5 +185,19 @@ namespace
 			dim_ = 0;
 
 		return RESULT_CODE::SUCCESS;
+	}
+
+	ISet* SetImpl::clone() const
+	{
+		SetImpl* res = new SetImpl();
+
+		if (res != nullptr)
+		{
+			res->dim_ = dim_;
+			for (IVector* vec : data_)
+				res->data_.push_back(vec->clone());
+		}
+
+		return res;
 	}
 }
