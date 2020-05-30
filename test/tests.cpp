@@ -19,6 +19,7 @@ int main()
 	driver.addTest(new Set2());
 	driver.addTest(new Set3());
 	driver.addTest(new Set4());
+	driver.addTest(new Set5());
 
 	driver.runTests(std::cout);
 	std::cin.get();

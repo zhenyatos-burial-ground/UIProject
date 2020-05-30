@@ -143,10 +143,7 @@ void Set4::test()
 	_EQ_(res->getDim(), (size_t)3);
 	_EQ_(res->getSize(), (size_t)2);
 
-	delete set1;
-	delete set2;
-
-	IVector* test;
+	IVector* test = nullptr;
 	// CHECK: vec1, vec2, vec3, vec4 are in the intersection with tolerance 0.2
 	_EQ_(res->get(test, vec1, normInf, 0.2), RESULT_CODE::SUCCESS);
 	_INEQ_(test, (IVector*)nullptr);
@@ -174,5 +171,55 @@ void Set4::test()
 	delete vec4;
 	delete vec5;
 	delete vec6;
+	delete set1;
+	delete set2;
+	delete res;
+}
+
+void Set5::test()
+{
+	ILogger* logger = ILogger::createLogger(nullptr);
+
+	double data1[3] = { 1, 0, 0 };
+	IVector* vec1 = IVector::createVector(3, data1, logger);
+	double data2[3] = { 0, 1, 0 };
+	IVector* vec2 = IVector::createVector(3, data2, logger);
+	double data3[3] = { 0, 1.1, 0 };
+	IVector* vec3 = IVector::createVector(3, data3, logger);
+	double data4[3] = { 2, 0, 1 };
+	IVector* vec4 = IVector::createVector(3, data4, logger);
+	
+	IVector::NORM normInf = IVector::NORM::NORM_INF;
+
+	ISet* set1 = ISet::createSet(logger);
+	set1->insert(vec1, normInf, 0.2);
+	set1->insert(vec2, normInf, 0.2);
+
+	ISet* set2 = ISet::createSet(logger);
+	set2->insert(vec3, normInf, 0.2);
+	set2->insert(vec4, normInf, 0.2);
+
+	// CHECK: sub is correct
+	ISet* res = ISet::sub(set1, set2, normInf, 0.2, logger);
+	_EQ_(res->getDim(), (size_t)3);
+	_EQ_(res->getSize(), (size_t)1);
+
+	IVector* test = nullptr;
+	// CHECK: vec1 is in sub with tolerance 0.2
+	_EQ_(res->get(test, vec1, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_INEQ_(test, (IVector*)nullptr);
+	test = nullptr;
+
+	// CHECK vec2 is not in sub with tolerance 0.2
+	_EQ_(res->get(test, vec2, normInf, 0.2), RESULT_CODE::SUCCESS);
+	_EQ_(test, (IVector*)nullptr);
+
+
+	delete vec1;
+	delete vec2;
+	delete vec3;
+	delete vec4;
+	delete set1;
+	delete set2;
 	delete res;
 }

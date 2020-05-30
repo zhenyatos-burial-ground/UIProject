@@ -36,3 +36,11 @@ private:
 public:
 	Set4() : Test(SET_PREFIX + "Intersect") {}
 };
+
+class Set5 : public Test
+{
+private:
+	void test() override;
+public:
+	Set5() : Test(SET_PREFIX + "Sub") {}
+};
