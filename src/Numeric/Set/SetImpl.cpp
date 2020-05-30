@@ -19,6 +19,9 @@ namespace
 		RESULT_CODE get(IVector*& pVector, IVector const* pSample, IVector::NORM norm, double tolerance) const override;
 		size_t getDim() const override;
 		size_t getSize() const override;
+		void clear() override;
+		RESULT_CODE erase(size_t index) override;
+		RESULT_CODE erase(IVector const* pSample, IVector::NORM norm, double tolerance) override;
 	};
 
 	SetImpl::SetImpl()
@@ -72,8 +75,7 @@ namespace
 
 	RESULT_CODE SetImpl::get(IVector*& pVector, size_t index) const
 	{
-		size_t maxIndex = data_.size() - 1;
-		if (index > maxIndex)
+		if (index > data_.size())
 		{
 			pVector = nullptr;
 			return RESULT_CODE::OUT_OF_BOUNDS;
@@ -126,5 +128,58 @@ namespace
 	size_t SetImpl::getSize() const
 	{
 		return data_.size();
+	}
+
+	void SetImpl::clear()
+	{
+		for (IVector* vec : data_)
+		{
+			delete vec;
+		}
+		data_.clear();
+		dim_ = 0;
+	}
+
+	RESULT_CODE SetImpl::erase(size_t index)
+	{
+		if (index >= data_.size())
+			return RESULT_CODE::OUT_OF_BOUNDS;
+
+		delete data_[index];
+		data_.erase(data_.begin() + index);
+
+		if (data_.empty())
+			dim_ = 0;
+		return RESULT_CODE::SUCCESS;
+	}
+
+	RESULT_CODE SetImpl::erase(IVector const* pSample, IVector::NORM norm, double tolerance)
+	{
+		if (pSample == nullptr || tolerance < 0)
+			return RESULT_CODE::WRONG_ARGUMENT;
+		
+		if (pSample->getDim() != dim_)
+			return RESULT_CODE::WRONG_DIM;
+
+		for (auto iter = data_.begin(); iter != data_.end();)
+		{
+			IVector* diff = IVector::sub(*iter, pSample, logger_);
+			if (diff == nullptr)
+				return RESULT_CODE::CALCULATION_ERROR;
+			if (diff->norm(norm) < tolerance)
+			{
+				delete *iter;
+				iter = data_.erase(iter);
+			}
+			else
+				iter++;
+
+			delete diff;
+		}
+
+		if (data_.empty())
+			dim_ = 0;
+
+		return RESULT_CODE::SUCCESS;
 	}
 }
