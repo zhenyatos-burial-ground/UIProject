@@ -1,4 +1,5 @@
 #include "vectortests.h"
+#include "settests.h"
 #include "leaktest.h"
 #include <iostream>
 
@@ -13,6 +14,12 @@ int main()
 	driver.addTest(new Vector4());
 	driver.addTest(new Vector5());
 	driver.addTest(new Vector6());
+
+	driver.addTest(new Set1());
+	driver.addTest(new Set2());
+	driver.addTest(new Set3());
+	driver.addTest(new Set4());
+	driver.addTest(new Set5());
 
 	driver.runTests(std::cout);
 	std::cin.get();

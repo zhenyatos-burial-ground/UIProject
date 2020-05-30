@@ -21,6 +21,8 @@ public:
 	template<typename T>
 	void _EQ_(T a, T b) 
 	{ 
+		if (!res)
+			return;
 		eqNo++;
 		res &= (a == b); 
 		if (!res)
@@ -30,6 +32,8 @@ public:
 	template<typename T>
 	void _INEQ_(T a, T b) 
 	{ 
+		if (!res)
+			return;
 		ineqNo++;
 		res &= (a != b); 
 		if (!res)
